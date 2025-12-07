@@ -17,7 +17,7 @@ export interface Tetromino {
   color?: string; // Base color if needed, but elements have their own colors
 }
 
-export const GRID_ROWS = 20;
+export const GRID_ROWS = 14;
 export const GRID_COLS = 10;
 
 export const ELEMENT_COLORS: Record<ElementType, string> = {

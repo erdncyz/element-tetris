@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useGameLogic } from './game/useGameLogic';
 import { GameBoard } from './components/GameBoard';
 import { soundManager } from './game/SoundManager';
+import { GoogleAd } from './components/GoogleAd';
 import './index.css';
 
 function App() {
@@ -190,10 +191,10 @@ function App() {
           </div>
         </div>
 
-        <div className="sidebar">
-          {/* This sidebar is currently empty after removing the music control button. */}
-        </div>
+
       </div>
+
+      <GoogleAd slot="1837975635" style={{ maxWidth: '800px', margin: '2rem auto' }} />
     </div>
   );
 }
