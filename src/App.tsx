@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { useGameLogic } from './game/useGameLogic';
 import { GameBoard } from './components/GameBoard';
 import { soundManager } from './game/SoundManager';
-import { GoogleAd } from './components/GoogleAd';
 import './index.css';
 
 function App() {
@@ -136,18 +135,50 @@ function App() {
             <div style={{
               position: 'absolute',
               top: 0, left: 0, right: 0, bottom: 0,
-              backgroundColor: 'rgba(0,0,0,0.85)',
+              background: 'rgba(0, 0, 0, 0.75)',
+              backdropFilter: 'blur(20px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(20px) saturate(180%)',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
               color: 'white',
               zIndex: 10,
-              borderRadius: 8,
+              borderRadius: 16,
+              animation: 'fadeIn 0.3s ease-out',
             }}>
-              <h2 style={{ fontSize: '3rem', margin: 0, color: '#ff4444' }}>GAME OVER</h2>
-              <p style={{ fontSize: '1.5rem' }}>Final Score: {score}</p>
-              <button onClick={restart} style={{ fontSize: '1.2rem', padding: '10px 20px' }}>Try Again</button>
+              <h2 style={{
+                fontSize: '3.5rem',
+                margin: 0,
+                marginBottom: '1rem',
+                fontFamily: 'Orbitron, monospace',
+                fontWeight: 900,
+                background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                textShadow: '0 0 40px rgba(250, 112, 154, 0.5)',
+                letterSpacing: '3px',
+              }}>GAME OVER</h2>
+              <p style={{
+                fontSize: '1.8rem',
+                marginBottom: '2rem',
+                fontWeight: 600,
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}>Final Score: {score}</p>
+              <button onClick={restart} style={{
+                fontSize: '1.3rem',
+                padding: '15px 40px',
+                background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+                border: 'none',
+                borderRadius: '12px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                boxShadow: '0 6px 25px rgba(67, 233, 123, 0.4)',
+              }}>🎮 Try Again</button>
             </div>
           )}
 
@@ -155,15 +186,29 @@ function App() {
             <div style={{
               position: 'absolute',
               top: 0, left: 0, right: 0, bottom: 0,
-              backgroundColor: 'rgba(0,0,0,0.5)',
+              background: 'rgba(0, 0, 0, 0.6)',
+              backdropFilter: 'blur(15px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(15px) saturate(180%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               color: 'white',
               zIndex: 10,
-              borderRadius: 8,
+              borderRadius: 16,
+              animation: 'fadeIn 0.2s ease-out',
             }}>
-              <h2>PAUSED</h2>
+              <h2 style={{
+                fontSize: '3rem',
+                fontFamily: 'Orbitron, monospace',
+                fontWeight: 900,
+                background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                textShadow: '0 0 40px rgba(79, 172, 254, 0.5)',
+                letterSpacing: '5px',
+                animation: 'pulse 2s ease-in-out infinite',
+              }}>⏸️ PAUSED</h2>
             </div>
           )}
           <div style={{
@@ -193,8 +238,6 @@ function App() {
 
 
       </div>
-
-      <GoogleAd slot="1837975635" style={{ maxWidth: '800px', margin: '2rem auto' }} />
     </div>
   );
 }

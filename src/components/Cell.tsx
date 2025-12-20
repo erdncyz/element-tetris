@@ -29,27 +29,57 @@ export const Cell: React.FC<CellProps> = ({ cell, size = 30 }) => {
             style={{
                 width: size,
                 height: size,
-                backgroundColor: cell.isEmpty ? 'rgba(20, 20, 30, 0.8)' : 'transparent',
-                border: cell.isEmpty ? '1px solid rgba(255, 255, 255, 0.05)' : 'none',
+                backgroundColor: cell.isEmpty
+                    ? 'rgba(15, 15, 25, 0.6)'
+                    : 'rgba(0, 0, 0, 0.3)',
+                border: cell.isEmpty
+                    ? '1px solid rgba(102, 126, 234, 0.1)'
+                    : '1px solid rgba(255, 255, 255, 0.15)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                borderRadius: 4,
-                boxShadow: cell.isEmpty ? 'none' : `0 0 10px ${cell.color}40`,
-                transition: 'all 0.1s',
+                borderRadius: 6,
+                boxShadow: cell.isEmpty
+                    ? 'inset 0 0 10px rgba(0, 0, 0, 0.5)'
+                    : `
+                        0 0 20px ${cell.color}60,
+                        0 0 40px ${cell.color}30,
+                        inset 0 0 15px rgba(255, 255, 255, 0.1)
+                    `,
+                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                position: 'relative',
+                overflow: 'hidden',
             }}
         >
             {imageSrc && (
-                <img
-                    src={imageSrc}
-                    alt={cell.type}
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'contain',
-                        filter: 'drop-shadow(0 0 2px rgba(0,0,0,0.5))'
-                    }}
-                />
+                <>
+                    <div
+                        style={{
+                            position: 'absolute',
+                            inset: 0,
+                            background: `radial-gradient(circle at center, ${cell.color}20 0%, transparent 70%)`,
+                            pointerEvents: 'none',
+                        }}
+                    />
+                    <img
+                        src={imageSrc}
+                        alt={cell.type}
+                        style={{
+                            width: '90%',
+                            height: '90%',
+                            objectFit: 'contain',
+                            filter: `
+                                drop-shadow(0 0 8px ${cell.color}80)
+                                drop-shadow(0 2px 4px rgba(0,0,0,0.6))
+                                brightness(1.1)
+                                contrast(1.1)
+                            `,
+                            position: 'relative',
+                            zIndex: 1,
+                            animation: 'cellPop 0.3s ease-out',
+                        }}
+                    />
+                </>
             )}
         </div>
     );
