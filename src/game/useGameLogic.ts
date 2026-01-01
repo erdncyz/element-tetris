@@ -389,6 +389,25 @@ export const useGameLogic = () => {
         return () => cancelAnimationFrame(requestRef.current!);
     }, [drop, gameState.gameOver, gameState.isPaused]);
 
+    const restart = useCallback(() => {
+        const p1 = createRandomTetromino(1);
+        const p2 = createRandomTetromino(1);
+        const p3 = createRandomTetromino(1);
+        const current = createRandomTetromino(1);
+
+        setGameState({
+            grid: createEmptyGrid(),
+            currentPiece: current,
+            nextPieces: [p1, p2, p3],
+            score: 0,
+            level: 1,
+            lines: 0,
+            gameOver: false,
+            isPaused: false,
+        });
+        speedRef.current = INITIAL_SPEED;
+    }, []);
+
     return {
         gameState,
         move,
@@ -396,6 +415,6 @@ export const useGameLogic = () => {
         drop,
         hardDrop,
         pause: () => setGameState(prev => ({ ...prev, isPaused: !prev.isPaused })),
-        restart: () => window.location.reload(), // Simple restart
+        restart,
     };
 };
