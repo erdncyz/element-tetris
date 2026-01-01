@@ -7,13 +7,21 @@ import './index.css';
 
 function App() {
   const [gameStarted, setGameStarted] = useState(false);
+  const [hasPlayedBefore, setHasPlayedBefore] = useState(false);
   const { gameState, move, rotate, drop, hardDrop, pause, restart } = useGameLogic();
   const { grid, currentPiece, score, level, lines, gameOver, isPaused } = gameState;
 
   const handleStartGame = () => {
     setGameStarted(true);
     soundManager.playMusic();
-    restart();
+    // Sadece ilk kez veya game over ise restart yap
+    if (!hasPlayedBefore || gameOver) {
+      restart();
+      setHasPlayedBefore(true);
+    } else if (isPaused) {
+      // Oyun pause ise devam et
+      pause();
+    }
   };
 
   // Keyboard controls
@@ -110,9 +118,23 @@ function App() {
     touchRef.current = null;
   };
 
+  const handleContinueGame = () => {
+    setGameStarted(true);
+    soundManager.playMusic();
+    if (isPaused) {
+      pause(); // Resume the game
+    }
+  };
+
   // Show start screen if game hasn't started
   if (!gameStarted) {
-    return <StartScreen onStartGame={handleStartGame} />;
+    return (
+      <StartScreen 
+        onStartGame={handleStartGame} 
+        onContinueGame={handleContinueGame}
+        canContinue={hasPlayedBefore && !gameOver}
+      />
+    );
   }
 
   return (
@@ -137,7 +159,10 @@ function App() {
             <button onClick={pause}>{isPaused ? 'RESUME' : 'PAUSE'}</button>
             <button onClick={restart} style={{ backgroundColor: '#d32f2f' }}>RESTART</button>
             <button 
-              onClick={() => setGameStarted(false)} 
+              onClick={() => {
+                if (!isPaused) pause();
+                setGameStarted(false);
+              }} 
               style={{ backgroundColor: '#555' }}
             >
               ANA MENÜ

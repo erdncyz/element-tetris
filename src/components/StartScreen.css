@@ -171,6 +171,62 @@
   font-size: 0.8rem;
 }
 
+.button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.continue-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 1.2rem 3rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  font-family: 'Orbitron', monospace;
+  letter-spacing: 2px;
+  
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 16px;
+  color: white;
+  cursor: pointer;
+  
+  box-shadow:
+    0 8px 30px rgba(102, 126, 234, 0.4),
+    0 0 0 0 rgba(102, 126, 234, 0.4);
+  
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: pulse-glow-continue 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow-continue {
+  0%, 100% {
+    box-shadow:
+      0 8px 30px rgba(102, 126, 234, 0.4),
+      0 0 0 0 rgba(102, 126, 234, 0.4);
+  }
+  50% {
+    box-shadow:
+      0 8px 40px rgba(102, 126, 234, 0.6),
+      0 0 0 10px rgba(102, 126, 234, 0);
+  }
+}
+
+.continue-button:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow:
+    0 12px 40px rgba(102, 126, 234, 0.6),
+    0 0 60px rgba(118, 75, 162, 0.3);
+}
+
+.continue-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
 .start-button {
   display: inline-flex;
   align-items: center;

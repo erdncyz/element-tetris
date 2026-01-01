@@ -3,9 +3,11 @@ import './StartScreen.css';
 
 interface StartScreenProps {
   onStartGame: () => void;
+  onContinueGame?: () => void;
+  canContinue?: boolean;
 }
 
-export const StartScreen: React.FC<StartScreenProps> = ({ onStartGame }) => {
+export const StartScreen: React.FC<StartScreenProps> = ({ onStartGame, onContinueGame, canContinue }) => {
   return (
     <div className="start-screen">
       <div className="start-screen-content">
@@ -68,10 +70,18 @@ export const StartScreen: React.FC<StartScreenProps> = ({ onStartGame }) => {
           </div>
         </div>
 
-        <button className="start-button" onClick={onStartGame}>
-          <span className="button-icon">🎮</span>
-          <span className="button-text">YENİ OYUN</span>
-        </button>
+        <div className="button-container">
+          {canContinue && onContinueGame && (
+            <button className="continue-button" onClick={onContinueGame}>
+              <span className="button-icon">▶️</span>
+              <span className="button-text">DEVAM ET</span>
+            </button>
+          )}
+          <button className="start-button" onClick={onStartGame}>
+            <span className="button-icon">🎮</span>
+            <span className="button-text">YENİ OYUN</span>
+          </button>
+        </div>
 
         <div className="developer-credit">
           <a
