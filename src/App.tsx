@@ -1,15 +1,25 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useGameLogic } from './game/useGameLogic';
 import { GameBoard } from './components/GameBoard';
+import { StartScreen } from './components/StartScreen';
 import { soundManager } from './game/SoundManager';
 import './index.css';
 
 function App() {
+  const [gameStarted, setGameStarted] = useState(false);
   const { gameState, move, rotate, drop, hardDrop, pause, restart } = useGameLogic();
   const { grid, currentPiece, score, level, lines, gameOver, isPaused } = gameState;
 
+  const handleStartGame = () => {
+    setGameStarted(true);
+    soundManager.playMusic();
+    restart();
+  };
+
   // Keyboard controls
   useEffect(() => {
+    if (!gameStarted) return;
+    
     const handleKeyDown = (e: KeyboardEvent) => {
       // Auto-start music on first interaction
       soundManager.playMusic();
@@ -41,7 +51,7 @@ function App() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [move, rotate, drop, hardDrop, pause, gameOver]);
+  }, [move, rotate, drop, hardDrop, pause, gameOver, gameStarted]);
 
   // Touch handling
   const touchRef = useRef<{ x: number, y: number, time: number } | null>(null);
@@ -100,6 +110,11 @@ function App() {
     touchRef.current = null;
   };
 
+  // Show start screen if game hasn't started
+  if (!gameStarted) {
+    return <StartScreen onStartGame={handleStartGame} />;
+  }
+
   return (
     <div>
       <h1>Element Tetris</h1>
@@ -121,6 +136,12 @@ function App() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <button onClick={pause}>{isPaused ? 'RESUME' : 'PAUSE'}</button>
             <button onClick={restart} style={{ backgroundColor: '#d32f2f' }}>RESTART</button>
+            <button 
+              onClick={() => setGameStarted(false)} 
+              style={{ backgroundColor: '#555' }}
+            >
+              ANA MENÜ
+            </button>
           </div>
         </div>
 
@@ -179,6 +200,21 @@ function App() {
                 cursor: 'pointer',
                 boxShadow: '0 6px 25px rgba(67, 233, 123, 0.4)',
               }}>🎮 Try Again</button>
+              <button 
+                onClick={() => setGameStarted(false)} 
+                style={{
+                  fontSize: '1rem',
+                  padding: '12px 30px',
+                  marginTop: '15px',
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  border: 'none',
+                  borderRadius: '12px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  color: 'white',
+                  boxShadow: '0 4px 20px rgba(102, 126, 234, 0.4)',
+                }}
+              >🏠 Ana Menü</button>
             </div>
           )}
 

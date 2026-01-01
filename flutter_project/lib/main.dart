@@ -17,7 +17,260 @@ class ElementTetrisApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: const Color(0xFF050505),
       ),
-      home: const GamePage(),
+      home: const StartScreen(),
+    );
+  }
+}
+
+// Start Screen Widget
+class StartScreen extends StatelessWidget {
+  const StartScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF0f0c29),
+              Color(0xFF302b63),
+              Color(0xFF24243e),
+              Color(0xFF1a1a2e),
+            ],
+          ),
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+                // Game Title
+                ShaderMask(
+                  shaderCallback: (bounds) => const LinearGradient(
+                    colors: [
+                      Color(0xFF667eea),
+                      Color(0xFF764ba2),
+                      Color(0xFFf093fb),
+                      Color(0xFF4facfe),
+                    ],
+                  ).createShader(bounds),
+                  child: const Text(
+                    'Element Tetris',
+                    style: TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white,
+                      letterSpacing: 2,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  '🔥💧🪨🧨 Elementlerin Gücünü Birleştir!',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white70,
+                    letterSpacing: 1,
+                  ),
+                ),
+                const SizedBox(height: 30),
+
+                // Info Sections
+                _buildInfoSection(
+                  '🎮 Nasıl Oynanır?',
+                  [
+                    '⬅️ ➡️ Sol/Sağ tuşları ile hareket',
+                    '⬆️ Yukarı tuşu ile döndür',
+                    '⬇️ Aşağı tuşu ile hızlı düşür',
+                    '⎵ Space tuşu ile anında düşür',
+                    'P Duraklat',
+                  ],
+                ),
+                const SizedBox(height: 12),
+
+                _buildInfoSection(
+                  '📱 Dokunmatik Kontroller',
+                  [
+                    '👆 Dokun - Döndür',
+                    '👈👉 Sağa/Sola kaydır - Hareket',
+                    '👇 Aşağı kaydır - Anında düşür',
+                    '👆 Yukarı kaydır - Hızlı düşür',
+                  ],
+                ),
+                const SizedBox(height: 12),
+
+                // Elements Section
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.05),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.white.withOpacity(0.1)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ShaderMask(
+                        shaderCallback: (bounds) => const LinearGradient(
+                          colors: [Color(0xFF4facfe), Color(0xFF00f2fe)],
+                        ).createShader(bounds),
+                        child: const Text(
+                          '⚗️ Element Etkileşimleri',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      _buildElementRow('💧', '→', '🔥', '= Su ateşi söndürür!'),
+                      _buildElementRow('🧨', '→', '🪨', '= Dinamit kayaları patlatır!'),
+                      _buildElementRow('🔥', '→', '🧨', '= Ateş dinamiti patlatır!'),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                _buildInfoSection(
+                  '🏆 Puanlama',
+                  [
+                    'Her satır silme: 100 × Seviye puanı',
+                    'Element birleşimleri: Bonus puan!',
+                    'Seviye arttıkça hız artar',
+                  ],
+                ),
+                const SizedBox(height: 30),
+
+                // Start Button
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (_) => const GamePage()),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF43e97b), Color(0xFF38f9d7)],
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF43e97b).withOpacity(0.4),
+                          blurRadius: 20,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
+                    ),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('🎮', style: TextStyle(fontSize: 24)),
+                        SizedBox(width: 12),
+                        Text(
+                          'YENİ OYUN',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF0a0a0a),
+                            letterSpacing: 2,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 30),
+
+                // Developer Credit
+                GestureDetector(
+                  onTap: () {
+                    // Could open URL
+                  },
+                  child: Text(
+                    'Developed by Mercury Software',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.white.withOpacity(0.3),
+                      fontFamily: 'monospace',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoSection(String title, List<String> items) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.white.withOpacity(0.1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ShaderMask(
+            shaderCallback: (bounds) => const LinearGradient(
+              colors: [Color(0xFF4facfe), Color(0xFF00f2fe)],
+            ).createShader(bounds),
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          ...items.map((item) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 3),
+            child: Text(
+              item,
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.white.withOpacity(0.8),
+              ),
+            ),
+          )),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildElementRow(String icon1, String arrow, String icon2, String result) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Text(icon1, style: const TextStyle(fontSize: 20)),
+          const SizedBox(width: 8),
+          Text(arrow, style: TextStyle(color: Colors.white.withOpacity(0.4))),
+          const SizedBox(width: 8),
+          Text(icon2, style: const TextStyle(fontSize: 20)),
+          const SizedBox(width: 8),
+          Text(
+            result,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.white.withOpacity(0.7),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -110,6 +363,16 @@ class _GamePageState extends State<GamePage> {
                       });
                     },
                     child: const Text('RESTART'),
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.grey[700]),
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (_) => const StartScreen()),
+                      );
+                    },
+                    child: const Text('ANA MENÜ'),
                   ),
                 ],
               ),
