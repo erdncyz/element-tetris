@@ -139,9 +139,11 @@ class StartScreen extends StatelessWidget {
                 _buildInfoSection(
                   '🏆 Puanlama',
                   [
+                    'Yatay satır tamamen dolunca silinir',
                     'Her satır silme: 100 × Seviye puanı',
-                    'Element birleşimleri: Bonus puan!',
-                    'Seviye arttıkça hız artar',
+                    'Çoklu satır silme: Bonus puan!',
+                    'Element birleşimleri: Ekstra bonus!',
+                    'Her 10 satırda seviye artar, hız yükselir',
                   ],
                 ),
                 const SizedBox(height: 30),

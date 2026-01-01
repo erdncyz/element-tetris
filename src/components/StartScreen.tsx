@@ -63,9 +63,11 @@ export const StartScreen: React.FC<StartScreenProps> = ({ onStartGame, onContinu
           <div className="info-section">
             <h3>🏆 Puanlama</h3>
             <ul>
+              <li>Yatay satır tamamen dolunca silinir</li>
               <li>Her satır silme: 100 × Seviye puanı</li>
-              <li>Element birleşimleri: Bonus puan!</li>
-              <li>Seviye arttıkça hız artar</li>
+              <li>Çoklu satır silme: Bonus puan!</li>
+              <li>Element birleşimleri: Ekstra bonus!</li>
+              <li>Her 10 satırda seviye artar, hız yükselir</li>
             </ul>
           </div>
         </div>
