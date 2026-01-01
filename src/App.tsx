@@ -14,14 +14,9 @@ function App() {
   const handleStartGame = () => {
     setGameStarted(true);
     soundManager.playMusic();
-    // Sadece ilk kez veya game over ise restart yap
-    if (!hasPlayedBefore || gameOver) {
-      restart();
-      setHasPlayedBefore(true);
-    } else if (isPaused) {
-      // Oyun pause ise devam et
-      pause();
-    }
+    // Yeni oyun her zaman sıfırdan başlar
+    restart();
+    setHasPlayedBefore(true);
   };
 
   // Keyboard controls
