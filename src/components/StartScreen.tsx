@@ -16,18 +16,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({ onStartGame, onContinu
 
         <div className="game-info-container">
           <div className="info-section">
-            <h3>🎮 Nasıl Oynanır?</h3>
-            <ul>
-              <li>⬅️ ➡️ Sol/Sağ tuşları ile hareket</li>
-              <li>⬆️ Yukarı tuşu ile döndür</li>
-              <li>⬇️ Aşağı tuşu ile hızlı düşür</li>
-              <li>⎵ Space tuşu ile anında düşür</li>
-              <li>P Duraklat</li>
-            </ul>
-          </div>
-
-          <div className="info-section">
-            <h3>📱 Dokunmatik Kontroller</h3>
+            <h3>📱 Nasıl Oynanır?</h3>
             <ul>
               <li>👆 Dokun - Döndür</li>
               <li>👈👉 Sağa/Sola kaydır - Hareket</li>
