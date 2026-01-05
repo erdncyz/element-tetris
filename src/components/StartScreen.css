@@ -6,7 +6,8 @@
   bottom: 0;
   display: flex;
   flex-direction: column;
-  /* padding removed from here, moved to content for better scroll handling */
+  align-items: center;
+  justify-content: flex-start;
   padding: 0;
 
   background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1a1a2e);
@@ -46,14 +47,14 @@
   text-align: center;
   animation: fadeInUp 0.8s ease-out;
 
-  /* Auto margins center the item if there's space, but stick to top if scrolling is needed */
-  margin: auto;
+  /* Ensure no vertical auto margins. Horizontal checking only. */
+  margin: 0 auto;
 
   padding: 20px;
   /* Extra generous top padding for notch */
-  padding-top: max(60px, env(safe-area-inset-top));
-  /* Generous bottom padding for potential ads */
-  padding-bottom: max(100px, env(safe-area-inset-bottom));
+  padding-top: max(80px, env(safe-area-inset-top));
+  /* Generous bottom padding for scrolling space */
+  padding-bottom: max(120px, env(safe-area-inset-bottom));
   padding-left: max(20px, env(safe-area-inset-left));
   padding-right: max(20px, env(safe-area-inset-right));
 }
