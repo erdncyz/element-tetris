@@ -3,6 +3,7 @@ import { useGameLogic } from './game/useGameLogic';
 import { GameBoard } from './components/GameBoard';
 import { StartScreen } from './components/StartScreen';
 import { soundManager } from './game/SoundManager';
+import { AdMobService } from './game/AdMob';
 import './index.css';
 
 function App() {
@@ -10,6 +11,25 @@ function App() {
   const [hasPlayedBefore, setHasPlayedBefore] = useState(false);
   const { gameState, move, rotate, drop, hardDrop, pause, restart } = useGameLogic();
   const { grid, currentPiece, score, level, lines, gameOver, isPaused } = gameState;
+
+  useEffect(() => {
+    const initAds = async () => {
+      await AdMobService.initialize();
+      await AdMobService.showBanner();
+      await AdMobService.prepareInterstitial();
+    };
+    initAds();
+
+    return () => {
+      AdMobService.hideBanner();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (gameOver) {
+      AdMobService.showInterstitial();
+    }
+  }, [gameOver]);
 
   const handleStartGame = () => {
     setGameStarted(true);
@@ -22,7 +42,7 @@ function App() {
   // Keyboard controls
   useEffect(() => {
     if (!gameStarted) return;
-    
+
     const handleKeyDown = (e: KeyboardEvent) => {
       // Auto-start music on first interaction
       soundManager.playMusic();
@@ -124,8 +144,8 @@ function App() {
   // Show start screen if game hasn't started
   if (!gameStarted) {
     return (
-      <StartScreen 
-        onStartGame={handleStartGame} 
+      <StartScreen
+        onStartGame={handleStartGame}
         onContinueGame={handleContinueGame}
         canContinue={hasPlayedBefore && !gameOver}
       />
@@ -153,11 +173,11 @@ function App() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <button onClick={pause}>{isPaused ? 'RESUME' : 'PAUSE'}</button>
             <button onClick={restart} style={{ backgroundColor: '#d32f2f' }}>RESTART</button>
-            <button 
+            <button
               onClick={() => {
                 if (!isPaused) pause();
                 setGameStarted(false);
-              }} 
+              }}
               style={{ backgroundColor: '#555' }}
             >
               ANA MENÜ
@@ -220,8 +240,8 @@ function App() {
                 cursor: 'pointer',
                 boxShadow: '0 6px 25px rgba(67, 233, 123, 0.4)',
               }}>🎮 Try Again</button>
-              <button 
-                onClick={() => setGameStarted(false)} 
+              <button
+                onClick={() => setGameStarted(false)}
                 style={{
                   fontSize: '1rem',
                   padding: '12px 30px',
