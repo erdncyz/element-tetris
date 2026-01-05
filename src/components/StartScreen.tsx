@@ -52,11 +52,10 @@ export const StartScreen: React.FC<StartScreenProps> = ({ onStartGame, onContinu
           <div className="info-section">
             <h3>🏆 Puanlama</h3>
             <ul>
-              <li>Yatay satır tamamen dolunca silinir</li>
-              <li>Her satır silme: 100 × Seviye puanı</li>
-              <li>Çoklu satır silme: Bonus puan!</li>
-              <li>Element birleşimleri: Ekstra bonus!</li>
-              <li>Her 10 satırda seviye artar, hız yükselir</li>
+              <li>Satırlar yatayda dolunca bloklar patlar 💥</li>
+              <li>Element etkileşimleri (Su+Ateş) ekstra puan verir ✨</li>
+              <li>Her 10 satır temizlendiğinde Seviye artar ve oyun hızlanır 🚀</li>
+              <li>Yüksek puan için ardışık patlatmalar (Kombo) yap!</li>
             </ul>
           </div>
         </div>
