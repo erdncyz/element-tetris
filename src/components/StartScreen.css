@@ -6,22 +6,15 @@
   bottom: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  /* Use justify-content: flex-start on mobile to allow scrolling overflow */
-  justify-content: flex-start;
+  /* padding removed from here, moved to content for better scroll handling */
+  padding: 0;
+
   background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1a1a2e);
   background-size: 400% 400%;
   animation: gradientShift 15s ease infinite;
   z-index: 1000;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  /* Smooth scroll on iOS */
-  padding: 20px;
-  padding-top: max(40px, env(safe-area-inset-top));
-  /* Extra top padding */
-  padding-bottom: max(20px, env(safe-area-inset-bottom));
-  padding-left: max(20px, env(safe-area-inset-left));
-  padding-right: max(20px, env(safe-area-inset-right));
 }
 
 @media (min-height: 800px) {
@@ -52,6 +45,17 @@
   width: 100%;
   text-align: center;
   animation: fadeInUp 0.8s ease-out;
+
+  /* Auto margins center the item if there's space, but stick to top if scrolling is needed */
+  margin: auto;
+
+  padding: 20px;
+  /* Extra generous top padding for notch */
+  padding-top: max(60px, env(safe-area-inset-top));
+  /* Generous bottom padding for potential ads */
+  padding-bottom: max(100px, env(safe-area-inset-bottom));
+  padding-left: max(20px, env(safe-area-inset-left));
+  padding-right: max(20px, env(safe-area-inset-right));
 }
 
 @keyframes fadeInUp {
