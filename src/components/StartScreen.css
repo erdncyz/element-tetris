@@ -331,9 +331,8 @@
 
 /* Mobile Responsive */
 @media (max-width: 600px) {
-  .start-screen {
-    padding: 15px;
-  }
+  /* Commented out to preserve safe-area padding from base style */
+  /* .start-screen { padding: 15px; } */
 
   .game-title {
     font-size: 2.2rem;
