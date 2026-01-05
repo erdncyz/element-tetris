@@ -30,11 +30,11 @@ export class AdMobService {
     static async showBanner() {
         try {
             const options: BannerAdOptions = {
-                adId: 'ca-app-pub-3940256099942544/2934735716', // Test Ad ID
+                adId: 'ca-app-pub-1271900948473545/2904018365', // Real Banner ID
                 adSize: BannerAdSize.ADAPTIVE_BANNER,
                 position: BannerAdPosition.BOTTOM_CENTER,
                 margin: 0,
-                isTesting: true
+                isTesting: false
             };
             await AdMob.showBanner(options);
         } catch (e) {
@@ -61,8 +61,8 @@ export class AdMobService {
     static async prepareInterstitial() {
         try {
             const options: AdOptions = {
-                adId: 'ca-app-pub-3940256099942544/4411468910', // Test Ad ID
-                isTesting: true
+                adId: 'ca-app-pub-1271900948473545/5399493229', // Real Interstitial ID
+                isTesting: false
             };
             await AdMob.prepareInterstitial(options);
         } catch (e) {
