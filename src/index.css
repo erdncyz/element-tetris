@@ -84,6 +84,10 @@ body::before {
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
+  padding-top: max(2rem, env(safe-area-inset-top));
+  padding-bottom: max(2rem, env(safe-area-inset-bottom));
+  padding-left: max(2rem, env(safe-area-inset-left));
+  padding-right: max(2rem, env(safe-area-inset-right));
   text-align: center;
   position: relative;
   z-index: 1;
