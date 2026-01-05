@@ -4,6 +4,7 @@ import { GameBoard } from './components/GameBoard';
 import { StartScreen } from './components/StartScreen';
 import { soundManager } from './game/SoundManager';
 import { AdMobService } from './game/AdMob';
+import { FirebaseService } from './game/FirebaseService';
 import './index.css';
 
 function App() {
@@ -19,6 +20,13 @@ function App() {
       await AdMobService.prepareInterstitial();
     };
     initAds();
+
+    // Init Firebase
+    const initFirebase = async () => {
+      await FirebaseService.initialize();
+      await FirebaseService.setScreenName('Home');
+    };
+    initFirebase();
 
     return () => {
       AdMobService.hideBanner();
