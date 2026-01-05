@@ -25,6 +25,16 @@ export const StartScreen: React.FC<StartScreenProps> = ({ onStartGame, onContinu
             </ul>
           </div>
 
+          <div className="info-section">
+            <h3>🏆 Puanlama</h3>
+            <ul>
+              <li>Satırlar yatayda dolunca bloklar patlar 💥</li>
+              <li>Element etkileşimleri (Su+Ateş) ekstra puan verir ✨</li>
+              <li>Her 10 satır temizlendiğinde Seviye artar ve oyun hızlanır 🚀</li>
+              <li>Yüksek puan için ardışık patlatmalar (Kombo) yap!</li>
+            </ul>
+          </div>
+
           <div className="info-section elements-section">
             <h3>⚗️ Element Etkileşimleri</h3>
             <div className="element-grid">
@@ -47,16 +57,6 @@ export const StartScreen: React.FC<StartScreenProps> = ({ onStartGame, onContinu
                 <span className="element-result">= Ateş dinamiti patlatır!</span>
               </div>
             </div>
-          </div>
-
-          <div className="info-section">
-            <h3>🏆 Puanlama</h3>
-            <ul>
-              <li>Satırlar yatayda dolunca bloklar patlar 💥</li>
-              <li>Element etkileşimleri (Su+Ateş) ekstra puan verir ✨</li>
-              <li>Her 10 satır temizlendiğinde Seviye artar ve oyun hızlanır 🚀</li>
-              <li>Yüksek puan için ardışık patlatmalar (Kombo) yap!</li>
-            </ul>
           </div>
         </div>
 
