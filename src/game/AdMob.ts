@@ -30,7 +30,7 @@ export class AdMobService {
     static async showBanner() {
         try {
             const options: BannerAdOptions = {
-                adId: 'ca-app-pub-1271900948473545/2904018365', // Real Banner ID
+                adId: 'ca-app-pub-1271900948473545/2650342272',
                 adSize: BannerAdSize.ADAPTIVE_BANNER,
                 position: BannerAdPosition.BOTTOM_CENTER,
                 margin: 0,
@@ -61,7 +61,7 @@ export class AdMobService {
     static async prepareInterstitial() {
         try {
             const options: AdOptions = {
-                adId: 'ca-app-pub-1271900948473545/5399493229', // Real Interstitial ID
+                adId: 'ca-app-pub-1271900948473545/9498821654', // Real Interstitial ID from Screenshot
                 isTesting: false
             };
             await AdMob.prepareInterstitial(options);
