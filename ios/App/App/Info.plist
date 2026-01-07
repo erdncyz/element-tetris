@@ -221,6 +221,14 @@
 			<key>SKAdNetworkIdentifier</key>
 			<string>3q84641514.skadnetwork</string>
 		</dict>
+        <dict>
+            <key>SKAdNetworkIdentifier</key>
+            <string>v9wttpbfk9.skadnetwork</string>
+        </dict>
+        <dict>
+            <key>SKAdNetworkIdentifier</key>
+            <string>n38lu8286q.skadnetwork</string>
+        </dict>
 	</array>
 </dict>
 </plist>

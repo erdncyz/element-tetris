@@ -15,8 +15,8 @@ export class AdMobService {
             }
 
             const options: AdMobInitializationOptions = {
-                testingDevices: ['2077ef9a63d2b398840261c8221a0c9b'], // Example Test Device ID
-                initializeForTesting: true,
+                testingDevices: ['2077ef9a63d2b398840261c8221a0c9b', '3782e4a61322392c70c3e9c283a5e13b'], // Example Test Device ID
+                initializeForTesting: false,
             };
 
             await AdMob.initialize(options);
@@ -28,7 +28,7 @@ export class AdMobService {
     }
 
     static async showBanner() {
-        try {
+        const show = async () => {
             const options: BannerAdOptions = {
                 adId: 'ca-app-pub-1271900948473545/2650342272',
                 adSize: BannerAdSize.ADAPTIVE_BANNER,
@@ -37,8 +37,19 @@ export class AdMobService {
                 isTesting: false
             };
             await AdMob.showBanner(options);
+        };
+
+        try {
+            await show();
         } catch (e) {
-            console.error('Failed to show banner', e);
+            console.error('Failed to show banner, retrying in 2s...', e);
+            setTimeout(async () => {
+                try {
+                    await show();
+                } catch (retryError) {
+                    console.error('Failed to show banner on retry', retryError);
+                }
+            }, 2000);
         }
     }
 

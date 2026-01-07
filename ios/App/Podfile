@@ -18,6 +18,7 @@ end
 target 'App' do
   capacitor_pods
   # Add your Pods here
+  pod 'Google-Mobile-Ads-SDK'
 end
 
 post_install do |installer|
