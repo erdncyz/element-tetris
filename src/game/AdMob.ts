@@ -34,7 +34,7 @@ export class AdMobService {
                 adSize: BannerAdSize.ADAPTIVE_BANNER,
                 position: BannerAdPosition.BOTTOM_CENTER,
                 margin: 0,
-                isTesting: false
+                isTesting: true
             };
             await AdMob.showBanner(options);
         };
@@ -73,7 +73,7 @@ export class AdMobService {
         try {
             const options: AdOptions = {
                 adId: 'ca-app-pub-1271900948473545/9498821654', // Real Interstitial ID from Screenshot
-                isTesting: false
+                isTesting: true
             };
             await AdMob.prepareInterstitial(options);
         } catch (e) {
