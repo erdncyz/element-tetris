@@ -14,7 +14,7 @@ function App() {
   const [language, setLanguage] = useState<Language>('tr');
   const t = translations[language];
   const { gameState, move, rotate, drop, hardDrop, pause, restart } = useGameLogic();
-  const { grid, currentPiece, score, level, gameOver, isPaused } = gameState;
+  const { grid, currentPiece, score, level, gameOver, isPaused, effects } = gameState;
 
   useEffect(() => {
     const initAds = async () => {
@@ -200,7 +200,7 @@ function App() {
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          <GameBoard grid={grid} currentPiece={currentPiece} />
+          <GameBoard grid={grid} currentPiece={currentPiece} effects={effects} />
 
           {gameOver && (
             <div style={{
@@ -299,23 +299,21 @@ function App() {
           )}
           <div style={{
             textAlign: 'center',
-            padding: '20px',
-            marginTop: '20px',
+            padding: '5px',
+            marginTop: '5px',
           }}>
             <a
               href="https://erdincyilmaz.netlify.app/"
               target="_blank"
               rel="noopener noreferrer"
               style={{
-                color: 'rgba(255, 255, 255, 0.3)',
                 fontSize: '0.8rem',
-                fontFamily: 'monospace',
+                fontFamily: 'Orbitron, monospace',
                 textDecoration: 'none',
                 cursor: 'pointer',
-                transition: 'color 0.3s ease'
+                fontWeight: 'bold',
+                animation: 'elementalShift 8s infinite linear',
               }}
-              onMouseOver={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)'}
-              onMouseOut={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.3)'}
             >
               Developed by Erdinç YILMAZ
             </a>

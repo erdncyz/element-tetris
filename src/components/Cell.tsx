@@ -76,7 +76,12 @@ export const Cell: React.FC<CellProps> = ({ cell, size = 30 }) => {
                             `,
                             position: 'relative',
                             zIndex: 1,
-                            animation: 'cellPop 0.3s ease-out',
+                            animation:
+                                cell.type === 'FIRE' ? 'flicker 1.5s infinite alternate' :
+                                    cell.type === 'WATER' ? 'wave 2s infinite ease-in-out' :
+                                        cell.type === 'ROCK' ? 'rumble 3s infinite' :
+                                            cell.type === 'DYNAMITE' ? 'pulse-dynamite 1s infinite' :
+                                                'cellPop 0.3s ease-out',
                         }}
                     />
                 </>

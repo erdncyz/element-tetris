@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import type { Cell, Tetromino } from './types';
+import type { Cell, Tetromino, GameEffect } from './types';
 import { GRID_COLS, GRID_ROWS, ELEMENT_COLORS } from './types';
 import { createEmptyGrid, createRandomTetromino, checkCollision, rotateMatrix } from './gameUtils';
 import { soundManager } from './SoundManager';
@@ -14,6 +14,7 @@ interface GameState {
     lines: number;
     gameOver: boolean;
     isPaused: boolean;
+    effects: GameEffect[];
 }
 
 const INITIAL_SPEED = 1000;
@@ -28,6 +29,7 @@ export const useGameLogic = () => {
         lines: 0,
         gameOver: false,
         isPaused: false,
+        effects: [],
     });
 
     const speedRef = useRef(INITIAL_SPEED);
@@ -184,7 +186,7 @@ export const useGameLogic = () => {
         }
 
         // 2. Resolve Interactions & Gravity & Lines
-        const { finalGrid, scoreDelta, linesCleared, isGameOver } = resolveBoard(newGrid, level, newCells);
+        const { finalGrid, scoreDelta, linesCleared, isGameOver, newEffects } = resolveBoard(newGrid, level, newCells);
 
         if (isGameOver) {
             return { ...state, grid: finalGrid, gameOver: true };
@@ -215,31 +217,31 @@ export const useGameLogic = () => {
             score: score + scoreDelta,
             lines: newLines,
             level: newLevel,
+            effects: newEffects, // Only show new effects for this turn
         };
     };
 
     const resolveBoard = (startGrid: Cell[][], _level: number, initialActiveCells: { r: number, c: number }[]) => {
         let grid = startGrid.map(row => row.map(c => ({ ...c })));
         let activeCells = [...initialActiveCells];
-        // Track cells that have already interacted this turn to prevent "drilling"
         const exhaustedCells = new Set<string>();
 
         let totalScore = 0;
         let totalLines = 0;
         let stable = false;
         let combo = 0;
+        const newEffects: GameEffect[] = [];
 
         while (!stable) {
             stable = true;
             const toRemove: { r: number, c: number, reason: string }[] = [];
 
-            // 1. Interactions (Check only active cells)
+            // 1. Interactions
             for (const { r, c } of activeCells) {
                 if (r < 0 || r >= GRID_ROWS || c < 0 || c >= GRID_COLS) continue;
                 const cell = grid[r][c];
                 if (cell.isEmpty) continue;
 
-                // If this cell has already killed something, it's exhausted for this turn
                 if (exhaustedCells.has(`${r},${c}`)) continue;
 
                 const neighbors = [
@@ -247,12 +249,11 @@ export const useGameLogic = () => {
                 ];
 
                 if (cell.type === 'FIRE') {
-                    // Fire vs Water: Both disappear
                     for (const n of neighbors) {
                         if (n.r >= 0 && n.r < GRID_ROWS && n.c >= 0 && n.c < GRID_COLS) {
                             if (grid[n.r][n.c].type === 'WATER') {
-                                toRemove.push({ r: n.r, c: n.c, reason: 'FIRE_EXTINGUISHED' }); // Remove Water
-                                toRemove.push({ r, c, reason: 'FIRE_EXTINGUISHED' }); // Remove Fire (Self)
+                                toRemove.push({ r: n.r, c: n.c, reason: 'FIRE_EXTINGUISHED' });
+                                toRemove.push({ r, c, reason: 'FIRE_EXTINGUISHED' });
                                 exhaustedCells.add(`${r},${c}`);
                                 break;
                             }
@@ -261,12 +262,11 @@ export const useGameLogic = () => {
                 }
 
                 if (cell.type === 'WATER') {
-                    // Water vs Fire: Both disappear
                     for (const n of neighbors) {
                         if (n.r >= 0 && n.r < GRID_ROWS && n.c >= 0 && n.c < GRID_COLS) {
                             if (grid[n.r][n.c].type === 'FIRE') {
-                                toRemove.push({ r: n.r, c: n.c, reason: 'FIRE_EXTINGUISHED' }); // Remove Fire
-                                toRemove.push({ r, c, reason: 'FIRE_EXTINGUISHED' }); // Remove Water (Self)
+                                toRemove.push({ r: n.r, c: n.c, reason: 'FIRE_EXTINGUISHED' });
+                                toRemove.push({ r, c, reason: 'FIRE_EXTINGUISHED' });
                                 exhaustedCells.add(`${r},${c}`);
                                 break;
                             }
@@ -275,18 +275,15 @@ export const useGameLogic = () => {
                 }
 
                 if (cell.type === 'DYNAMITE') {
-                    // Dynamite vs Rock: Both disappear
                     if (r + 1 < GRID_ROWS) {
                         if (grid[r + 1][c].type === 'ROCK') {
-                            toRemove.push({ r: r + 1, c, reason: 'ROCK_DESTROYED' }); // Remove Rock
-                            toRemove.push({ r, c, reason: 'ROCK_DESTROYED' }); // Remove Dynamite (Self)
+                            toRemove.push({ r: r + 1, c, reason: 'ROCK_DESTROYED' });
+                            toRemove.push({ r, c, reason: 'ROCK_DESTROYED' });
                             exhaustedCells.add(`${r},${c}`);
                         } else if (!grid[r + 1][c].isEmpty) {
-                            // Dynamite landed on something else (not Rock) -> Wasted
                             toRemove.push({ r, c, reason: 'DYNAMITE_WASTED' });
                         }
                     } else {
-                        // Dynamite on floor -> Wasted
                         toRemove.push({ r, c, reason: 'DYNAMITE_WASTED' });
                     }
                 }
@@ -294,40 +291,50 @@ export const useGameLogic = () => {
 
             // Apply removals
             if (toRemove.length > 0) {
-                stable = false; // Removals happened, so we need to check gravity
+                stable = false;
                 toRemove.forEach(({ r, c, reason }) => {
                     if (grid[r][c].type !== 'NONE') {
                         grid[r][c] = { type: 'NONE', color: ELEMENT_COLORS.NONE, isEmpty: true };
+
                         if (reason === 'FIRE_EXTINGUISHED') {
                             totalScore += 20;
+                            newEffects.push({
+                                id: Math.random().toString(36).substr(2, 9),
+                                row: r, col: c, type: 'SPLASH', value: '+20', color: '#00BFFF'
+                            });
                             soundManager.playSplash();
                         }
                         if (reason === 'ROCK_DESTROYED') {
                             totalScore += 50;
+                            newEffects.push({
+                                id: Math.random().toString(36).substr(2, 9),
+                                row: r, col: c, type: 'EXPLOSION', value: '+50', color: '#FF4500'
+                            });
                             soundManager.playRockBreak();
                         }
                         if (reason === 'DYNAMITE_WASTED') {
                             totalScore -= 10;
-                            // soundManager.playFizzle(); // Optional
+                            newEffects.push({
+                                id: Math.random().toString(36).substr(2, 9),
+                                row: r, col: c, type: 'SCORE', value: '-10', color: '#FF0000'
+                            });
                         }
                     }
                 });
                 combo++;
             }
 
-            // 2. Line Clears (Mark as empty, let gravity handle shift)
+            // 2. Line Clears
             let linesClearedThisPass = 0;
             for (let r = 0; r < GRID_ROWS; r++) {
-                // Check if row is full
                 if (grid[r].every(cell => !cell.isEmpty)) {
-                    // Check if all elements are the same type
                     const firstType = grid[r][0].type;
                     const allSame = grid[r].every(cell => cell.type === firstType);
 
                     if (allSame) {
                         linesClearedThisPass++;
                         grid[r] = Array(GRID_COLS).fill(null).map(() => ({ type: 'NONE', color: ELEMENT_COLORS.NONE, isEmpty: true }));
-                        stable = false; // Lines cleared, gravity needed
+                        stable = false;
                     }
                 }
             }
@@ -335,6 +342,11 @@ export const useGameLogic = () => {
             if (linesClearedThisPass > 0) {
                 totalLines += linesClearedThisPass;
                 totalScore += linesClearedThisPass * 100 * (combo + 1);
+                // Add line clear effect roughly in the middle
+                newEffects.push({
+                    id: Math.random().toString(36).substr(2, 9),
+                    row: GRID_ROWS / 2, col: GRID_COLS / 2, type: 'EXPLOSION', value: 'LEVEL UP!', color: '#FFD700'
+                });
                 confetti({ particleCount: 50 * linesClearedThisPass, spread: 60, origin: { y: 0.7 } });
                 soundManager.playClear();
             }
@@ -344,20 +356,17 @@ export const useGameLogic = () => {
             for (let c = 0; c < GRID_COLS; c++) {
                 for (let r = GRID_ROWS - 1; r >= 0; r--) {
                     if (grid[r][c].isEmpty) {
-                        // Find nearest block above
                         for (let k = r - 1; k >= 0; k--) {
                             if (!grid[k][c].isEmpty) {
-                                // Move k to r
                                 grid[r][c] = grid[k][c];
                                 grid[k][c] = { type: 'NONE', color: ELEMENT_COLORS.NONE, isEmpty: true };
 
-                                // Update exhausted status for moved cell
                                 if (exhaustedCells.has(`${k},${c}`)) {
                                     exhaustedCells.delete(`${k},${c}`);
                                     exhaustedCells.add(`${r},${c}`);
                                 }
 
-                                nextActiveCells.push({ r, c }); // This block moved, so it's active
+                                nextActiveCells.push({ r, c });
                                 stable = false;
                                 break;
                             }
@@ -365,11 +374,10 @@ export const useGameLogic = () => {
                     }
                 }
             }
-
             activeCells = nextActiveCells;
         }
 
-        return { finalGrid: grid, scoreDelta: totalScore, linesCleared: totalLines, isGameOver: false };
+        return { finalGrid: grid, scoreDelta: totalScore, linesCleared: totalLines, isGameOver: false, newEffects };
     };
 
     // Game Loop
@@ -404,6 +412,7 @@ export const useGameLogic = () => {
             lines: 0,
             gameOver: false,
             isPaused: false,
+            effects: [],
         });
         speedRef.current = INITIAL_SPEED;
     }, []);

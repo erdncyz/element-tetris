@@ -35,3 +35,12 @@ export const ELEMENT_ICONS: Record<ElementType, string> = {
   DYNAMITE: '🧨',
   NONE: '',
 };
+
+export interface GameEffect {
+  id: string;
+  row: number;
+  col: number;
+  type: 'SCORE' | 'EXPLOSION' | 'SPLASH' | 'CRUMBLE';
+  value?: number | string; // For score text
+  color?: string;
+}
