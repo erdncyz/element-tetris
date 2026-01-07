@@ -39,6 +39,45 @@
   pointer-events: none;
 }
 
+.language-selector {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  z-index: 10;
+
+  /* Add padding for safe area */
+  padding-top: calc(env(safe-area-inset-top) + 50px);
+  padding-right: max(20px, env(safe-area-inset-right));
+  padding-left: max(20px, env(safe-area-inset-left));
+}
+
+.lang-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  font-size: 0.9rem;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.lang-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.lang-btn.active {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: #4facfe;
+  box-shadow: 0 0 10px rgba(79, 172, 254, 0.3);
+  font-weight: bold;
+}
+
 .start-screen-content {
   position: relative;
   z-index: 1;
@@ -51,8 +90,8 @@
   margin: 0 auto;
 
   padding: 20px;
-  /* Extra generous top padding for notch */
-  padding-top: max(80px, env(safe-area-inset-top));
+  /* Top padding reduced since language-selector handles the notch space now */
+  padding-top: 10px;
   /* Generous bottom padding for scrolling space */
   padding-bottom: max(120px, env(safe-area-inset-bottom));
   padding-left: max(20px, env(safe-area-inset-left));
@@ -76,7 +115,7 @@
   font-size: 4rem;
   font-weight: 900;
   line-height: 1.1;
-  margin-top: 2rem;
+  margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   letter-spacing: 2px;
 
@@ -158,6 +197,13 @@
   color: rgba(255, 255, 255, 0.8);
   padding: 0.3rem 0;
   line-height: 1.4;
+}
+
+.description-text {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+  margin: 0;
 }
 
 .elements-section {

@@ -5,13 +5,16 @@ import { StartScreen } from './components/StartScreen';
 import { soundManager } from './game/SoundManager';
 import { AdMobService } from './game/AdMob';
 import { FirebaseService } from './game/FirebaseService';
+import { translations, type Language } from './translations';
 import './index.css';
 
 function App() {
   const [gameStarted, setGameStarted] = useState(false);
   const [hasPlayedBefore, setHasPlayedBefore] = useState(false);
+  const [language, setLanguage] = useState<Language>('tr');
+  const t = translations[language];
   const { gameState, move, rotate, drop, hardDrop, pause, restart } = useGameLogic();
-  const { grid, currentPiece, score, level, lines, gameOver, isPaused } = gameState;
+  const { grid, currentPiece, score, level, gameOver, isPaused } = gameState;
 
   useEffect(() => {
     const initAds = async () => {
@@ -156,6 +159,8 @@ function App() {
         onStartGame={handleStartGame}
         onContinueGame={handleContinueGame}
         canContinue={hasPlayedBefore && !gameOver}
+        language={language}
+        setLanguage={setLanguage}
       />
     );
   }
@@ -167,20 +172,17 @@ function App() {
       <div className="game-container">
         <div className="sidebar">
           <div className="stat-box">
-            <div className="stat-label">SCORE</div>
+            <div className="stat-label">{t.score}</div>
             <div className="stat-value">{score}</div>
           </div>
           <div className="stat-box">
-            <div className="stat-label">LEVEL</div>
+            <div className="stat-label">{t.level}</div>
             <div className="stat-value">{level}</div>
           </div>
-          <div className="stat-box">
-            <div className="stat-label">LINES</div>
-            <div className="stat-value">{lines}</div>
-          </div>
+
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <button onClick={pause}>{isPaused ? 'RESUME' : 'PAUSE'}</button>
-            <button onClick={restart} style={{ backgroundColor: '#d32f2f' }}>RESTART</button>
+            <button onClick={pause}>{isPaused ? t.resume : t.pause}</button>
+            <button onClick={restart} style={{ backgroundColor: '#d32f2f' }}>{t.restart}</button>
             <button
               onClick={() => {
                 if (!isPaused) pause();
@@ -188,7 +190,7 @@ function App() {
               }}
               style={{ backgroundColor: '#555' }}
             >
-              ANA MENÜ
+              {t.mainMenu}
             </button>
           </div>
         </div>
@@ -228,7 +230,7 @@ function App() {
                 WebkitTextFillColor: 'transparent',
                 textShadow: '0 0 40px rgba(250, 112, 154, 0.5)',
                 letterSpacing: '3px',
-              }}>GAME OVER</h2>
+              }}>{t.gameOver}</h2>
               <p style={{
                 fontSize: '1.8rem',
                 marginBottom: '2rem',
@@ -237,7 +239,7 @@ function App() {
                 WebkitBackgroundClip: 'text',
                 backgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
-              }}>Final Score: {score}</p>
+              }}>{t.finalScore}: {score}</p>
               <button onClick={restart} style={{
                 fontSize: '1.3rem',
                 padding: '15px 40px',
@@ -247,7 +249,7 @@ function App() {
                 fontWeight: 700,
                 cursor: 'pointer',
                 boxShadow: '0 6px 25px rgba(67, 233, 123, 0.4)',
-              }}>🎮 Try Again</button>
+              }}>🎮 {t.tryAgain}</button>
               <button
                 onClick={() => setGameStarted(false)}
                 style={{
@@ -262,7 +264,7 @@ function App() {
                   color: 'white',
                   boxShadow: '0 4px 20px rgba(102, 126, 234, 0.4)',
                 }}
-              >🏠 Ana Menü</button>
+              >🏠 {t.mainMenu}</button>
             </div>
           )}
 
@@ -292,7 +294,7 @@ function App() {
                 textShadow: '0 0 40px rgba(79, 172, 254, 0.5)',
                 letterSpacing: '5px',
                 animation: 'pulse 2s ease-in-out infinite',
-              }}>⏸️ PAUSED</h2>
+              }}>⏸️ {t.paused}</h2>
             </div>
           )}
           <div style={{
@@ -315,7 +317,7 @@ function App() {
               onMouseOver={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)'}
               onMouseOut={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.3)'}
             >
-              Developed by Mercury Software
+              Developed by Erdinç YILMAZ
             </a>
           </div>
         </div>

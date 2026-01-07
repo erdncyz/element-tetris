@@ -1,60 +1,74 @@
 import React from 'react';
 import './StartScreen.css';
+import { translations, type Language } from '../translations';
 
 interface StartScreenProps {
   onStartGame: () => void;
   onContinueGame?: () => void;
   canContinue?: boolean;
+  language: Language;
+  setLanguage: (lang: Language) => void;
 }
 
-export const StartScreen: React.FC<StartScreenProps> = ({ onStartGame, onContinueGame, canContinue }) => {
+export const StartScreen: React.FC<StartScreenProps> = ({
+  onStartGame,
+  onContinueGame,
+  canContinue,
+  language,
+  setLanguage
+}) => {
+  const t = translations[language];
+
   return (
     <div className="start-screen">
+      <div className="language-selector">
+        <button
+          className={`lang-btn ${language === 'tr' ? 'active' : ''}`}
+          onClick={() => setLanguage('tr')}
+        >
+          🇹🇷 TR
+        </button>
+        <button
+          className={`lang-btn ${language === 'en' ? 'active' : ''}`}
+          onClick={() => setLanguage('en')}
+        >
+          🇺🇸 EN
+        </button>
+      </div>
+
       <div className="start-screen-content">
         <h1 className="game-title">Element Tetris</h1>
-        <p className="game-subtitle">🔥💧🪨🧨 Elementlerin Gücünü Birleştir!</p>
+        <p className="game-subtitle">{t.subtitle}</p>
 
         <div className="game-info-container">
           <div className="info-section">
-            <h3>📱 Nasıl Oynanır?</h3>
+            <h3>{t.howToPlay}</h3>
             <ul>
-              <li>👆 Dokun - Döndür</li>
-              <li>👈👉 Sağa/Sola kaydır - Hareket</li>
-              <li>👇 Aşağı kaydır - Anında düşür</li>
-              <li>👆 Yukarı kaydır - Hızlı düşür</li>
+              {t.howToPlayItems.map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
             </ul>
           </div>
 
           <div className="info-section">
-            <h3>🏆 Puanlama</h3>
-            <ul>
-              <li>Satırlar yatayda dolunca bloklar patlar 💥</li>
-              <li>Element etkileşimleri (Su+Ateş) ekstra puan verir ✨</li>
-              <li>Her 10 satır temizlendiğinde Seviye artar ve oyun hızlanır 🚀</li>
-              <li>Yüksek puan için ardışık patlatmalar (Kombo) yap!</li>
-            </ul>
+            <h3>{t.scoring}</h3>
+            <p className="description-text">{t.scoringText}</p>
           </div>
 
           <div className="info-section elements-section">
-            <h3>⚗️ Element Etkileşimleri</h3>
+            <h3>{t.elementInteractions}</h3>
             <div className="element-grid">
               <div className="element-item">
                 <span className="element-icon">💧</span>
                 <span className="element-vs">→</span>
                 <span className="element-icon">🔥</span>
-                <span className="element-result">= Su ateşi söndürür!</span>
+                <span className="element-result">= {t.interactionWaterFire}</span>
               </div>
               <div className="element-item">
                 <span className="element-icon">🧨</span>
                 <span className="element-vs">→</span>
                 <span className="element-icon">🪨</span>
-                <span className="element-result">= Dinamit kayaları patlatır!</span>
-              </div>
-              <div className="element-item">
-                <span className="element-icon">🔥</span>
-                <span className="element-vs">→</span>
-                <span className="element-icon">🧨</span>
-                <span className="element-result">= Ateş dinamiti patlatır!</span>
+                <span className="element-result">= {t.interactionDynamiteRock}</span>
               </div>
             </div>
           </div>
@@ -64,12 +78,12 @@ export const StartScreen: React.FC<StartScreenProps> = ({ onStartGame, onContinu
           {canContinue && onContinueGame && (
             <button className="continue-button" onClick={onContinueGame}>
               <span className="button-icon">▶️</span>
-              <span className="button-text">DEVAM ET</span>
+              <span className="button-text">{t.continue}</span>
             </button>
           )}
           <button className="start-button" onClick={onStartGame}>
             <span className="button-icon">🎮</span>
-            <span className="button-text">YENİ OYUN</span>
+            <span className="button-text">{t.newGame}</span>
           </button>
         </div>
 
@@ -79,7 +93,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({ onStartGame, onContinu
             target="_blank"
             rel="noopener noreferrer"
           >
-            Developed by Mercury Software
+            Developed by Erdinç YILMAZ
           </a>
         </div>
       </div>

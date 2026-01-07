@@ -201,11 +201,11 @@ export const useGameLogic = () => {
 
         // Level up logic
         const newLines = lines + linesCleared;
-        // Level up every 2 lines
-        const newLevel = Math.floor(newLines / 2) + 1;
+        // Level up directly by lines cleared (User: "her satır patlamada direk 1 level artır")
+        const newLevel = level + linesCleared;
 
-        // Speed curve: Starts at 400ms (Fast!), decreases by 30ms per level, min 40ms
-        speedRef.current = Math.max(40, 400 - (newLevel - 1) * 30);
+        // Speed curve: Starts at 1000ms, decreases by 50ms per level, min 100ms
+        speedRef.current = Math.max(100, 1000 - (newLevel - 1) * 50);
 
         return {
             ...state,
