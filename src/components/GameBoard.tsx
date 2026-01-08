@@ -13,6 +13,29 @@ interface GameBoardProps {
 export const GameBoard: React.FC<GameBoardProps> = ({ grid, currentPiece, effects = [] }) => {
     // Filter active effects to handle animation durability
     const [activeEffects, setActiveEffects] = useState<GameEffect[]>([]);
+    const [cellSize, setCellSize] = useState(36);
+
+    useEffect(() => {
+        const calculateCellSize = () => {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+
+            // Estimate UI overhead (Header: ~60, Stats: ~100, Controls: ~120, Padding: ~40, Footer: ~50)
+            // On mobile, the sidebar is at the top.
+            const uiOverhead = width <= 768 ? 430 : 100; // More overhead on mobile due to stacked layout
+
+            const maxCellWidth = (width - 40) / GRID_COLS; // 40px horizontal padding/gap
+            const maxCellHeight = (height - uiOverhead) / GRID_ROWS;
+
+            // Clamp between 20 and 36
+            const size = Math.min(36, Math.max(20, Math.min(maxCellWidth, maxCellHeight)));
+            setCellSize(Math.floor(size));
+        };
+
+        calculateCellSize();
+        window.addEventListener('resize', calculateCellSize);
+        return () => window.removeEventListener('resize', calculateCellSize);
+    }, []);
 
     useEffect(() => {
         if (effects.length > 0) {
@@ -89,7 +112,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ grid, currentPiece, effect
         >
             {displayGrid.map((row, r) =>
                 row.map((cell, c) => (
-                    <CellComponent key={`${r}-${c}`} cell={cell} size={36} />
+                    <CellComponent key={`${r}-${c}`} cell={cell} size={cellSize} />
                 ))
             )}
 
@@ -99,12 +122,12 @@ export const GameBoard: React.FC<GameBoardProps> = ({ grid, currentPiece, effect
                     key={effect.id}
                     style={{
                         position: 'absolute',
-                        top: effect.row * (36 + 2) + 8, // row * (size + gap) + padding
-                        left: effect.col * (36 + 2) + 8,
+                        top: effect.row * (cellSize + 2) + 8, // row * (size + gap) + padding
+                        left: effect.col * (cellSize + 2) + 8,
                         pointerEvents: 'none',
                         zIndex: 20,
-                        width: 36,
-                        height: 36,
+                        width: cellSize,
+                        height: cellSize,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',

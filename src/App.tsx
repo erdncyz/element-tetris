@@ -219,7 +219,7 @@ function App() {
               animation: 'fadeIn 0.3s ease-out',
             }}>
               <h2 style={{
-                fontSize: '3.5rem',
+                fontSize: 'clamp(2rem, 10vw, 3.5rem)',
                 margin: 0,
                 marginBottom: '1rem',
                 fontFamily: 'Orbitron, monospace',
@@ -284,7 +284,7 @@ function App() {
               animation: 'fadeIn 0.2s ease-out',
             }}>
               <h2 style={{
-                fontSize: '3rem',
+                fontSize: 'clamp(1.5rem, 8vw, 3rem)',
                 fontFamily: 'Orbitron, monospace',
                 fontWeight: 900,
                 background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
