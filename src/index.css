@@ -105,7 +105,8 @@ body::before {
   margin: 0 auto;
   padding: 2rem;
   padding-top: max(2rem, env(safe-area-inset-top));
-  padding-bottom: max(2rem, env(safe-area-inset-bottom));
+  /* Add roughly 60px for AdMob Banner + Safe Area */
+  padding-bottom: calc(max(2rem, env(safe-area-inset-bottom)) + 60px);
   padding-left: max(2rem, env(safe-area-inset-left));
   padding-right: max(2rem, env(safe-area-inset-right));
   text-align: center;

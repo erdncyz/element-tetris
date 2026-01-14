@@ -22,7 +22,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({ grid, currentPiece, effect
 
             // Estimate UI overhead (Header: ~60, Stats: ~100, Controls: ~120, Padding: ~40, Footer: ~50)
             // On mobile, the sidebar is at the top.
-            const uiOverhead = width <= 768 ? 430 : 100; // More overhead on mobile due to stacked layout
+            // Also subtract AdMob Banner height (~60px) + Safe Area (~34px) on mobile
+            const adBannerHeight = width <= 768 ? 94 : 0;
+            const uiOverhead = (width <= 768 ? 430 : 100) + adBannerHeight;
 
             const maxCellWidth = (width - 40) / GRID_COLS; // 40px horizontal padding/gap
             const maxCellHeight = (height - uiOverhead) / GRID_ROWS;
