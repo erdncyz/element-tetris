@@ -18,9 +18,15 @@ function App() {
 
   useEffect(() => {
     const initAds = async () => {
-      await AdMobService.initialize();
-      await AdMobService.showBanner();
-      await AdMobService.prepareInterstitial();
+      try {
+        await AdMobService.initialize();
+        // Wait a moment for SDK to fully start before showing ads
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await AdMobService.showBanner();
+        await AdMobService.prepareInterstitial();
+      } catch (e) {
+        console.error('Ad initialization error:', e);
+      }
     };
     initAds();
 
@@ -38,7 +44,11 @@ function App() {
 
   useEffect(() => {
     if (gameOver) {
-      AdMobService.showInterstitial();
+      // Small delay to ensure game over screen is visible first
+      const timer = setTimeout(() => {
+        AdMobService.showInterstitial();
+      }, 500);
+      return () => clearTimeout(timer);
     }
   }, [gameOver]);
 

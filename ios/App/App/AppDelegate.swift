@@ -15,10 +15,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         FirebaseApp.configure()
 
-        // AdMob Test Device Configuration
+        // AdMob initialization
         MobileAds.shared.requestConfiguration.testDeviceIdentifiers = [
             "3782e4a61322392c70c3e9c283a5e13b"
         ]
+        MobileAds.shared.start { status in
+            print("AdMob SDK started. Adapter statuses: \(status.adapterStatusesByClassName)")
+        }
 
         return true
     }
